@@ -8,7 +8,7 @@ module.exports = function() {
 	var items = {};
 
 	var self = {
-		onChange: function(name) {},
+		onChange: {},
 		add: function(name, file) {
 			items[name] = {
 				file: file,
@@ -23,17 +23,24 @@ module.exports = function() {
 			fs.watchFile(
 				file,
 				{ persistent: true, interval: 5007 },
-				function() {items[name].setter(self.onChange(name));}
-			)
+				function() {
+					items[name].setter(function(err, data) {
+						self.onChange[name]();
+					});
+				}
+			);
+			this.onChange[name] = function(name) {};
 		},
 		get: function(name) {
 			return items[name].value;
 		},
 		getAll: function(cb) {
 			async.parallel(
-				_.map(items, function(item) {return item.setter;}),
+				_.map(items, function(item) {
+					return item.setter;
+				}),
 				function(err, results) {
-					cb(items);
+					cb();
 				}
 			);
 		}

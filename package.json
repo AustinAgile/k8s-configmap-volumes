@@ -1,6 +1,6 @@
 {
 	"name": "k8s-configmap-volumes",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "Library to deal with configmaps as volumes",
 	"private": false,
 	"repository": {
